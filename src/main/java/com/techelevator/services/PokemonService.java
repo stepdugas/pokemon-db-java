@@ -23,6 +23,7 @@ public class PokemonService {
     public PokemonDetail getPokemonDetailById(int id) {
         PokemonDetail pokemonDetail = restTemplate.getForObject(API_URL + id, PokemonDetail.class);
 //        System.out.println(pokemonDetail);
+        pokemonDetail.setApiId(id);
         return pokemonDetail;
     }
 

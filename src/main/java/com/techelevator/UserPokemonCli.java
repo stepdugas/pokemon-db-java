@@ -71,6 +71,13 @@ public class UserPokemonCli {
     }
 
     public void printFavorites() {
+        if (loggedInUser == null) {
+            System.out.println("Sorry. Only logged in users can see other users.");
+            System.out.println("Press enter to continue...");
+            System.out.flush();
+            input.nextLine();
+            return;
+        }
         List<PokemonDetail> list = pokemonDao.getAllFavorites(loggedInUser.getUserId() );
         System.out.println();
         for (PokemonDetail p : list) {

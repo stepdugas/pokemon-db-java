@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PokemonDetail {
     private int id;
-
+    private int apiId;
     private String name;
     @JsonProperty("base_experience")
     private int baseExperience;
@@ -61,12 +61,24 @@ public class PokemonDetail {
         this.sprite = sprite;
     }
 
+    public int getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(int apiId) {
+        this.apiId = apiId;
+    }
+
     @Override
     public String toString() {
-        return "name= " + name +
-                ", id= " + id +
-                ", baseExperience= " + baseExperience +
-                ", height= " + height +
-                ", weight= " + weight + sprite;
+        return "PokemonDetail{" +
+                "id=" + id +
+                ", apiId=" + apiId +
+                ", name='" + name + '\'' +
+                ", baseExperience=" + baseExperience +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", sprite=" + sprite +
+                '}';
     }
 }

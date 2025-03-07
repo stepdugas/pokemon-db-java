@@ -1,6 +1,8 @@
 package com.techelevator;
 
+import com.techelevator.dao.JdbcPokemonDao;
 import com.techelevator.dao.JdbcUserDao;
+import com.techelevator.dao.PokemonDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.models.Pokemon;
 import com.techelevator.models.PokemonDetail;
@@ -22,6 +24,7 @@ public class UserPokemonCli {
     private PasswordHasher passwordHasher;
 
     private UserDao userDao;
+    private PokemonDao pokemonDao;
 
     private User loggedInUser;
 
@@ -29,6 +32,7 @@ public class UserPokemonCli {
         passwordHasher = new PasswordHasher();
         userDao = new JdbcUserDao(datasource);
         input = new Scanner(System.in);
+        pokemonDao = new JdbcPokemonDao(datasource);
     }
 
     public static void main(String[] args) {
@@ -53,8 +57,10 @@ public class UserPokemonCli {
                 showUsers();
             } else if ("l".equalsIgnoreCase(option)) {
                 loginUser();
-            } else if ("p".equalsIgnoreCase(option)){
+            } else if ("p".equalsIgnoreCase(option)) {
                 pokemonMenu();
+            } else if ("f".equalsIgnoreCase(option)){
+                printFavorites();
             } else if ("q".equalsIgnoreCase(option)) {
                 System.out.println("Thanks for using the User Pokemon App!");
                 break;
@@ -63,6 +69,15 @@ public class UserPokemonCli {
             }
         }
     }
+
+    public void printFavorites() {
+        List<PokemonDetail> list = pokemonDao.getAllFavorites(loggedInUser.getUserId() );
+        System.out.println();
+        for (PokemonDetail p : list) {
+            System.out.println( p.getId() + " " + p.getName() );
+        }
+    }
+
     public void pokemonMenu(){
 
         if (loggedInUser == null) {
@@ -115,6 +130,12 @@ public class UserPokemonCli {
         int id = Integer.parseInt(input.nextLine());
         PokemonDetail detail = service.getPokemonDetailById(id);
         System.out.println(detail);
+        System.out.println();
+        System.out.println("Save to favorites? (y/n)");
+        String choice = input.nextLine();
+        if(choice.equalsIgnoreCase("y")) {
+            pokemonDao.saveFavorites(detail, loggedInUser.getUserId() );
+        }
 
 
     }
@@ -228,6 +249,7 @@ public class UserPokemonCli {
         System.out.println("(S)how all users");
         System.out.println("(L)og in");
         System.out.println("(P)Show Pokemon");
+        System.out.println("(F)List Favorite Pokemon");
         System.out.println("(Q)uit");
         System.out.println();
     }
